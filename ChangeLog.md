@@ -1,3 +1,7 @@
+## 0.7.4
+- main.js - 222 - Added to Create New Journal Dialog
+- Added CSS for Monk's Enhanced Journal
+
 ## 0.7.3
 - Updated Welcome Message to include github and fixed discord link
 - Fixed css interference
