@@ -1,3 +1,7 @@
+## 0.7.5
+- Moved to GitHub
+- Fixed render on sheet creation
+
 ## 0.7.4
 - main.js - 222 - Added to Create New Journal Dialog
 - Added CSS for Monk's Enhanced Journal

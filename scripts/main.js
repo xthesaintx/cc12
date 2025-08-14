@@ -142,44 +142,6 @@ Hooks.on('getJournalDirectoryEntryContext', (html, options) => {
         }
     });
 });
-// v13
-// Hooks.on('getJournalEntryContextOptions', (application, menuItems) => {
-//     if (!game.user.isGM) return;
-    
-//     // Add custom menu items to the end
-//     menuItems.push({
-//         name: "Export to Standard Journal",
-//         icon: '<i class="fas fa-book"></i>',
-//         condition: (element) => {
-//             const journalId = element.dataset.documentId;
-//             const journal = game.journal.get(journalId);
-//             return journal && journal.getFlag("campaign-codex", "type");
-//         },
-//         callback: async (element) => {
-//             const journalId = element.dataset.documentId;
-//             const journal = game.journal.get(journalId);
-//             if (journal) {
-//                 await CampaignCodexJournalConverter.showExportDialog(journal);
-//             }
-//         }
-//     }, {
-//         name: "Add to Group",
-//         icon: '<i class="fas fa-plus-circle"></i>',
-//         condition: (element) => {
-//             const journalId = element.dataset.documentId;
-//             const journal = game.journal.get(journalId);
-//             const journalType = journal?.getFlag("campaign-codex", "type");
-//             return journalType && ['region', 'location', 'shop', 'npc'].includes(journalType) && game.user.isGM;
-//         },
-//         callback: async (element) => {
-//             const journalId = element.dataset.documentId;
-//             const journal = game.journal.get(journalId);
-//             if (journal) {
-//                 await showAddToGroupDialog(journal); 
-//             }
-//         }
-//     });
-// });
 
 Hooks.on('renderJournalDirectory', (app, html, data) => {
     
@@ -195,65 +157,68 @@ Hooks.on('createJournalEntry', async (document, options, userId) => {
     const journalType = document.getFlag("campaign-codex", "type");
     if (!journalType) return;
 
+    // The only remaining job is to move it to the correct folder.
     const folder = getCampaignCodexFolder(journalType); 
     if (folder) {
         await document.update({ folder: folder.id });
-    }
-
-    let sheetClass = null;
-    switch (journalType) {
-        case "location": sheetClass = "campaign-codex.LocationSheet"; break;
-        case "shop":      sheetClass = "campaign-codex.ShopSheet";      break;
-        case "npc":       sheetClass = "campaign-codex.NPCSheet";      break;
-        case "region":    sheetClass = "campaign-codex.RegionSheet";    break;
-        case "group":     sheetClass = "campaign-codex.GroupSheet";     break;     
-    }
-    
-    if (sheetClass) {
-        await document.update({
-            "flags.core.sheetClass": sheetClass
-        });
-
-        document.sheet.render(true);
     }
 });
 
 // Add to the Create Dialog Button on Journal Directory
 Hooks.on("renderDialog", (dialog, html, data) => {
-    if (dialog.title === "Create New Journal Entry") { 
-        const campaignCodexTypes = {
-            region: "Campaign Codex: Region",
-            location: "Campaign Codex: Location",
-            shop: "Campaign Codex: Shop",
-            npc: "Campaign Codex: NPC",
-            group: "Campaign Codex: Group Overview"
-        };
-        const form = html[0].querySelector("form");
-        const nameInput = form.querySelector('input[name="name"]');
-        
-        const selectHTML = `
-            <div class="form-group">
-                <label>Type</label>
-                <div class="form-fields">
-                    <select name="flags.campaign-codex.type">
-                        <option value="">Standard Journal</option>
-                        <optgroup label="Campaign Codex">
-                            ${Object.entries(campaignCodexTypes).map(([key, label]) => `
-                                <option value="${key}">${label}</option>
-                            `).join('')}
-                        </optgroup>
-                    </select>
-                </div>
+    if (dialog.title !== "Create New Journal Entry") return;
+
+    const form = html[0].querySelector("form");
+    if (!form) return;
+
+    // --- NEW: Add a hidden input for the sheetClass ---
+    form.insertAdjacentHTML('beforeend', '<input type="hidden" name="flags.core.sheetClass" value="">');
+    const hiddenSheetInput = form.querySelector('input[name="flags.core.sheetClass"]');
+
+    const campaignCodexTypes = {
+        region: "Campaign Codex: Region",
+        location: "Campaign Codex: Location",
+        shop: "Campaign Codex: Shop",
+        npc: "Campaign Codex: NPC",
+        group: "Campaign Codex: Group Overview"
+    };
+
+    const nameInput = form.querySelector('input[name="name"]');
+    if (!nameInput) return;
+
+    const selectHTML = `
+        <div class="form-group">
+            <label>Type</label>
+            <div class="form-fields">
+                <select name="flags.campaign-codex.type">
+                    <option value="">Standard Journal</option>
+                    <optgroup label="Campaign Codex">
+                        ${Object.entries(campaignCodexTypes).map(([key, label]) => `
+                            <option value="${key}">${label}</option>
+                        `).join('')}
+                    </optgroup>
+                </select>
             </div>
-        `;
+        </div>
+    `;
 
-        nameInput.closest(".form-group").insertAdjacentHTML('afterend', selectHTML);
+    nameInput.closest(".form-group").insertAdjacentHTML('afterend', selectHTML);
+    dialog.setPosition({ height: "auto" });
 
-        dialog.setPosition({ height: "auto" });
+    // --- NEW: Add an event listener to the new dropdown ---
+    const typeSelect = form.querySelector('select[name="flags.campaign-codex.type"]');
+    if (typeSelect) {
+        typeSelect.addEventListener('change', (event) => {
+            const type = event.target.value;
+            let sheetClass = ""; // Default sheet
+            if (type) {
+                // Map the type to its corresponding sheet class name
+                sheetClass = `campaign-codex.${type.charAt(0).toUpperCase() + type.slice(1)}Sheet`;
+            }
+            hiddenSheetInput.value = sheetClass;
+        });
     }
 });
-
-
 
 Hooks.on('createScene', async (scene, options, userId) => {
     if (options.campaignCodexImport) {

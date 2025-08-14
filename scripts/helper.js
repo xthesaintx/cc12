@@ -339,26 +339,41 @@ export function addJournalDirectoryUI(html) {
     
     nativeHtml.querySelector('.create-location-btn')?.addEventListener('click', async () => {
         const name = await promptForName("Location");
-        if (name) await game.campaignCodex.createLocationJournal(name);
+        if (name){
+            const doc = await game.campaignCodex.createLocationJournal(name);
+                    doc?.sheet.render(true);
+    }
     });
 
     nativeHtml.querySelector('.create-shop-btn')?.addEventListener('click', async () => {
         const name = await promptForName("Entry");
-        if (name) await game.campaignCodex.createShopJournal(name);
+        if (name){
+            const doc = await game.campaignCodex.createShopJournal(name);
+                    doc?.sheet.render(true);
+    }
     });
 
     nativeHtml.querySelector('.create-npc-btn')?.addEventListener('click', async () => {
         const name = await promptForName("NPC Journal");
-        if (name) await game.campaignCodex.createNPCJournal(null, name);
+        if (name){
+            const doc = await game.campaignCodex.createNPCJournal(null, name);
+                    doc?.sheet.render(true);
+    }
     });
 
     nativeHtml.querySelector('.create-region-btn')?.addEventListener('click', async () => {
         const name = await promptForName("Region");
-        if (name) await game.campaignCodex.createRegionJournal(name);
+        if (name){
+            const doc = await game.campaignCodex.createRegionJournal(name);
+                    doc?.sheet.render(true);
+    }
     });
 
     nativeHtml.querySelector('.create-group-btn')?.addEventListener('click', async () => {
         const name = await promptForName("Group Overview");
-        if (name) await game.campaignCodex.createGroupJournal(name);
+        if (name){
+            const doc = await game.campaignCodex.createGroupJournal(name);
+        doc?.sheet.render(true);
+    }
     });
 }
