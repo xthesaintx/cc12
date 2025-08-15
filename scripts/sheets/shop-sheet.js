@@ -176,9 +176,9 @@ export class ShopSheet extends CampaignCodexBaseSheet {
               <button type="button" class="action-btn open-location" data-location-uuid="${data.linkedLocation.uuid}" title="Open Location">
                 <i class="fas fa-external-link-alt"></i>
               </button>
-              <button type="button" class="action-btn remove-location" title="Remove Location">
+              ${game.user.isGM ? `<button type="button" class="action-btn remove-location" title="Remove Location">
                 <i class="fas fa-unlink"></i>
-              </button>
+              </button>`:''}
             </div>
           </div>
         </div>
@@ -186,7 +186,7 @@ export class ShopSheet extends CampaignCodexBaseSheet {
     } else {
       locationSection = `
         <div class="form-section">
-          ${TemplateComponents.dropZone('location', 'fas fa-map-marker-alt', 'Set Location', 'Drag a location journal here to set where this entry is located')}
+          ${game.user.isGM ? `${TemplateComponents.dropZone('location', 'fas fa-map-marker-alt', 'Set Location', 'Drag a location journal here to set where this entry is located')}`:''}
         </div>
       `;
     }
@@ -208,7 +208,7 @@ export class ShopSheet extends CampaignCodexBaseSheet {
       <label class="toggle-control">
         <input type="checkbox" class="shop-loot-toggle" ${data.isLoot ? 'checked' : ''} style="margin: 0;"><span class="slider"></span>
       </label></div>`:''}
-    ${TemplateComponents.dropZone('item', 'fas fa-plus-circle', 'Add Items', 'Drag items from the items directory to add them to inventory')}
+    ${game.user.isGM ? `${TemplateComponents.dropZone('item', 'fas fa-plus-circle', 'Add Items', 'Drag items from the items directory to add them to inventory')}`:''}
     ${markupSection}
     ${TemplateComponents.inventoryTable(data.inventory, data.isLoot)}
   `;
@@ -247,7 +247,7 @@ _generateNPCsTab(data) {
 
   return `
     ${TemplateComponents.contentHeader('fas fa-users', 'NPCs', dropToMapBtn)}
-    ${TemplateComponents.dropZone('npc', 'fas fa-user-plus', 'Add NPCs', 'Drag NPCs or actors here to associate them with this location')}
+    ${game.user.isGM ? `${TemplateComponents.dropZone('npc', 'fas fa-user-plus', 'Add NPCs', 'Drag NPCs or actors here to associate them with this location')}`:''}
     ${TemplateComponents.entityGrid(data.linkedNPCs, 'npc', true)}
   `;
 }

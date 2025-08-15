@@ -22,7 +22,7 @@ static get defaultOptions() {
 async getData() {
   const data = await super.getData();
   const sheetData = this.document.getFlag("campaign-codex", "data") || {};
-
+  data.isGM = game.user.isGM;
   data.sheetData = {
     description: sheetData.description || "",
     notes: sheetData.notes || ""
@@ -40,6 +40,15 @@ async getData() {
   activateListeners(html) {
     const nativeHtml = html instanceof jQuery ? html[0] : html;
     super.activateListeners(html);
+
+  if (!game.user.isGM) {
+    const safeButtons = nativeHtml.querySelectorAll(
+      '[class*="open-"], .btn-expand-all, .btn-collapse-all, .toggle-tree-items'
+    );
+   safeButtons.forEach(button => {
+      button.disabled = false;
+    });
+  }
 
     
     this._activateTabs(nativeHtml);

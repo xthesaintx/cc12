@@ -103,7 +103,7 @@ static getAsset(assetType, entityType, currentImg = null) {
     const isShopSource = entity.source === 'shop';
     const isDirectSource = entity.source === 'direct';
     const sourceAttr = entity.source ? `data-source="${entity.source}"` : '';
-    
+
     let removeButton = '';
     if (isShopSource && (type === 'location' || type === 'npc')) {
       const entityTypeName = type === 'location' ? 'shop-based locations' : 'entry NPCs';
@@ -147,7 +147,7 @@ static getAsset(assetType, entityType, currentImg = null) {
           <button type="button" class="action-btn open-${type}" data-${type}-uuid="${entity.uuid}" title="Open ${type}">
             <i class="fas fa-external-link-alt"></i>
           </button>
-          ${removeButton}
+          ${game.user.isGM ? `${removeButton}`:''}
           ${actorButton}
         </div>
       </div>
@@ -203,9 +203,9 @@ static getAsset(assetType, entityType, currentImg = null) {
         <button type="button" class="action-btn open-actor" data-actor-uuid="${actor.uuid}" title="Open Actor Sheet">
           <i class="fas fa-external-link-alt"></i>
         </button>
-        <button type="button" class="action-btn remove-actor" title="Unlink Actor">
+        ${game.user.isGM ? `<button type="button" class="action-btn remove-actor" title="Unlink Actor">
           <i class="fas fa-unlink"></i>
-        </button>
+        </button>`:''}
       </div>
     ` : '';
 
@@ -286,12 +286,12 @@ static inventoryTable(inventory, isLootMode = false) {
           <button type="button" class="action-btn open-item" data-item-uuid="${item.itemUuid}" title="Open Item Sheet">
             <i class="fas fa-external-link-alt"></i>
           </button>
-          <button type="button" class="action-btn send-to-player" data-item-uuid="${item.itemUuid}" title="Send to Player">
+          ${game.user.isGM ? `<button type="button" class="action-btn send-to-player" data-item-uuid="${item.itemUuid}" title="Send to Player">
             <i class="fas fa-paper-plane"></i>
           </button>
-          <button type="button" class="action-btn remove-item" data-item-uuid="${item.itemUuid}" title="Remove Item">
+            <button type="button" class="action-btn remove-item" data-item-uuid="${item.itemUuid}" title="Remove Item">
             <i class="fas fa-trash"></i>
-          </button>
+          </button>`:''}
         </div>
       </div>
     `;
@@ -417,9 +417,9 @@ static groupMemberCard(member, children = []) {
           <button type="button" class="btn-open-sheet" data-uuid="${member.uuid}" title="Open Sheet">
             <i class="fas fa-external-link-alt"></i>
           </button>
-          <button type="button" class="btn-remove-member" data-uuid="${member.uuid}" title="Remove from Group">
+          ${game.user.isGM ? `<button type="button" class="btn-remove-member" data-uuid="${member.uuid}" title="Remove from Group">
             <i class="fas fa-times"></i>
-          </button>
+          </button>` : ''}
         </div>
       </div>
       
