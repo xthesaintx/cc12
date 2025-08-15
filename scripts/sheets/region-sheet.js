@@ -60,7 +60,7 @@ export class RegionSheet extends CampaignCodexBaseSheet {
         value: Array.isArray(data.allShops) ? data.allShops.length : 0,
         color: '#6f42c1'
       }},
-      { key: 'notes', label: 'Notes', icon: 'fas fa-sticky-note', active: this._currentTab === 'notes' }
+      ...(game.user.isGM ? [{ key: 'notes', label: 'Notes', icon: 'fas fa-sticky-note', active: this._currentTab === 'notes' }] : [])
     ];
     
     data.statistics = [
@@ -88,18 +88,18 @@ export class RegionSheet extends CampaignCodexBaseSheet {
         
         <span class="scene-name open-scene" data-scene-uuid="${data.linkedScene.uuid}" title="Open Scene"> <i class="fas fa-map"></i> ${data.linkedScene.name}</span>
 
-        <button type="button" class="scene-btn remove-scene" title="Unlink Scene">
+        ${game.user.isGM ? `<button type="button" class="scene-btn remove-scene" title="Unlink Scene">
           <i class="fas fa-unlink"></i>
-        </button>
+        </button>`:''}
       </div>
     `;
   }
   else
-  {   headerContent += `<div class="scene-info">
+  {   headerContent += `${game.user.isGM ? `<div class="scene-info">
         
         <span class="scene-name open-scene" style="text-align:center;"><i class="fas fa-link"></i> Drop scene to link</span>
 
-      </div>
+      </div>`:''}
     `;}
   
   if (headerContent) {

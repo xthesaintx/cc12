@@ -48,7 +48,7 @@ async getData() {
         { key: 'locations', label: 'Locations', icon: TemplateComponents.getAsset('icon', 'location'), active: !this._selectedSheet && this._currentTab === 'locations',
           statistic: { value: data.nestedData.allLocations.length }
         },
-        { key: 'notes', label: 'Notes', icon: 'fas fa-sticky-note', active: !this._selectedSheet && this._currentTab === 'notes' }
+      ...(game.user.isGM ? [{ key: 'notes', label: 'Notes', icon: 'fas fa-sticky-note', active: this._currentTab === 'notes' }] : [])
     ];
 
     if (this._selectedSheet) {
@@ -258,7 +258,7 @@ let sceneButtonHtml = '';
   _getSelectedSheetSubTabs(type, data, calculatedCounts = {}) {
     const baseTabs = [
       { key: 'info', label: 'Information', icon: 'fas fa-info-circle' },
-      { key: 'notes', label: 'GM Notes', icon: 'fas fa-sticky-note' }
+      ...(game.user.isGM ? [{ key: 'notes', label: 'GM Notes', icon: 'fas fa-sticky-note' }] : [])
     ];
 
     switch (type) {
@@ -349,7 +349,7 @@ let sceneButtonHtml = '';
         return '<div class="selected-content-section"><p><em>No NPCs linked.</em></p></div>';
       }
 
-      const dropToMapBtn = canvas.scene ? `
+      const dropToMapBtn = canvas.scene && game.user.isGM ? `
         <button type="button" class="refresh-btn npcs-to-map-button" data-sheet-uuid="${this._selectedSheet.uuid}">
           <i class="fas fa-map"></i> Drop Direct NPCs to Map
         </button>
@@ -439,7 +439,7 @@ let sceneButtonHtml = '';
       return '<div class="selected-content-section"><p><em>No NPCs linked.</em></p></div>';
     }
 
-    const dropToMapBtn = canvas.scene ? `
+    const dropToMapBtn = canvas.scene && game.user.isGM ? `
       <button type="button" class="npcs-to-map-button" data-sheet-uuid="${this._selectedSheet.uuid}">
         <i class="fas fa-map"></i> Drop NPCs to Map
       </button>
