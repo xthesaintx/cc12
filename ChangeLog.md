@@ -15,6 +15,7 @@
 - Hide non gm options from non gm users (drop to scene, edit name, drag drop etc)
 - Hiding toggles and buttons from non GM users.
 - Force enable of some buttons for player users foundry disables by default
+- Automatically sort alpha on cards (actors, locations), enable disable in settings
 
 ## 0.7.5
 - Moved to GitHub
