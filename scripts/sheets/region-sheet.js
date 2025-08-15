@@ -2,6 +2,7 @@ import { CampaignCodexBaseSheet } from './base-sheet.js';
 import { TemplateComponents } from './template-components.js';
 import { DescriptionEditor } from './editors/description-editor.js';
 import { CampaignCodexLinkers } from './linkers.js';
+import { promptForName} from "../helper.js";
 
 export class RegionSheet extends CampaignCodexBaseSheet {
   static get defaultOptions() {
@@ -143,6 +144,7 @@ export class RegionSheet extends CampaignCodexBaseSheet {
     return data;
   }
 
+
   _generateInfoTab(data) {
 
     return `
@@ -150,9 +152,30 @@ export class RegionSheet extends CampaignCodexBaseSheet {
       ${TemplateComponents.richTextSection('Description', 'fas fa-align-left', data.sheetData.enrichedDescription, 'description')}
     `;  }
 
+
+// Add location to region from locations tab
+  async _onCreateLocationJournal(event) {
+    event.preventDefault();
+    const name = await promptForName("Entry");
+    if (name) {
+      const locationJournal = await game.campaignCodex.createShopJournal(name);
+      if (locationJournal) {
+        await game.campaignCodex.linkRegionToLocation(this.document, locationJournal);
+        this.render(false);
+        locationJournal.sheet.render(true);
+      }
+    }
+  }
+
+
   _generateLocationsTab(data) {
+    const createLocationBtn = game.user.isGM ? `
+      <button type="button" class="refresh-btn create-location-button" title="Create New Entry">
+        <i class="fas fa-map-marker-alt"><span style="font-size:14px">+</span></i>
+      </button>` : '';
+
     return `
-      ${TemplateComponents.contentHeader('fas fa-map-marker-alt', 'Locations in this Region')}
+      ${TemplateComponents.contentHeader('fas fa-map-marker-alt', 'Locations in this Region', createLocationBtn)}
       ${game.user.isGM ? `${TemplateComponents.dropZone('location', 'fas fa-map-marker-alt', 'Add Locations', 'Drag location journals here to add them to this region')}`:''}
       ${TemplateComponents.entityGrid(data.linkedLocations, 'location')}
     `;
@@ -228,6 +251,7 @@ export class RegionSheet extends CampaignCodexBaseSheet {
 
 
   _activateSheetSpecificListeners(html) {
+    html.querySelector('.create-location-button')?.addEventListener('click', this._onCreateLocationJournal.bind(this));
 
     html.querySelectorAll('.remove-location')?.forEach(element => element.addEventListener('click', this._onRemoveFromRegion.bind(this))); 
 
