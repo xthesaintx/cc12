@@ -16,6 +16,8 @@
 - Hiding toggles and buttons from non GM users.
 - Force enable of some buttons for player users foundry disables by default
 - Automatically sort alpha on cards (actors, locations), enable disable in settings
+- Create and link a location by dropping a scene onto the location tab of a region, scene links to location. Checks for duplicate (same loc name, same scene) and won't create.
+- Fixed names not updating on open linked journals until reopen
 
 ## 0.7.5
 - Moved to GitHub

@@ -40,7 +40,26 @@ export class LocationSheet extends CampaignCodexBaseSheet {
     data.allNPCs = [...data.directNPCs, ...data.shopNPCs];
     data.linkedShops = await CampaignCodexLinkers.getLinkedShops(this.document, locationData.linkedShops || []);
     data.linkedRegion = await CampaignCodexLinkers.getLinkedRegion(this.document);
-    
+   
+    // JOURNAL
+    data.linkedStandardJournal = null;
+    if (locationData.linkedStandardJournal) {
+        try {
+            const journal = await fromUuid(locationData.linkedStandardJournal);
+            if (journal) {
+                data.linkedStandardJournal = {
+                    uuid: journal.uuid,
+                    name: journal.name,
+                    img: journal.img || "icons/svg/book.svg" 
+                };
+            }
+        } catch (error) {
+            console.warn(`Campaign Codex | Linked standard journal not found: ${locationData.linkedStandardJournal}`);
+        }
+    }
+
+
+
     data.sheetType = "location";
     data.sheetTypeLabel = "Location";
     data.customImage = this.document.getFlag("campaign-codex", "image") || TemplateComponents.getAsset('image','location');
@@ -140,8 +159,26 @@ export class LocationSheet extends CampaignCodexBaseSheet {
   }
 
 
+_generateInfoTab(data) {
+    // Journal
+    let standardJournalSection = `
+        <div class="scene-info" style="margin-top: -24px;margin-bottom: 24px; height:40px">
+        <span class="scene-name" title="Open Journal">
+          <i class="fas fa-book"></i> Journal: Drag Standard Journal to link</span>
+        </div>
+      `;
+    if (data.linkedStandardJournal) {
+        standardJournalSection = `
+        <div class="scene-info" style="margin-top: -24px;margin-bottom: 24px; height:40px">
+        <span class="scene-name open-journal" data-journal-uuid="${data.linkedStandardJournal.uuid}" title="Open Journal">
+          <i class="fas fa-book"></i> Journal: ${data.linkedStandardJournal.name}</span>
+            ${game.user.isGM ? `<button class="scene-btn remove-standard-journal" title="Unlink Journal">
+              <i class="fas fa-unlink"></i>
+            </button>`:''}
+        </div>
+      `;
+    }
 
-  _generateInfoTab(data) {
     let locationSection = '';
     
     if (data.linkedRegion) {
@@ -176,7 +213,8 @@ export class LocationSheet extends CampaignCodexBaseSheet {
     return `
       ${TemplateComponents.contentHeader('fas fas fa-info-circle', 'Information')}
       ${locationSection}
-      ${TemplateComponents.richTextSection('Description', 'fas fa-align-left', data.sheetData.enrichedDescription, 'description')}
+      ${standardJournalSection}
+     ${TemplateComponents.richTextSection('Description', 'fas fa-align-left', data.sheetData.enrichedDescription, 'description')}
     `;
   }
 
@@ -291,7 +329,28 @@ _generateNPCsTab(data) {
 
     
     html.querySelector('.refresh-npcs')?.addEventListener('click', this._onRefreshNPCs.bind(this));
+
+
+   // JOURNAL
+    html.querySelector('.remove-standard-journal')?.addEventListener('click', this._onRemoveStandardJournal.bind(this));
+    html.querySelectorAll('.open-journal')?.forEach(element => element.addEventListener('click', async (e) => await this._onOpenDocument(e, 'journal')));
+    // END
+
   }
+
+// JOURNAL
+  async _onRemoveStandardJournal(event) {
+    event.preventDefault();
+    await this._saveFormData();
+    const currentData = this.document.getFlag("campaign-codex", "data") || {};
+    currentData.linkedStandardJournal = null;
+    await this.document.setFlag("campaign-codex", "data", currentData);
+    this.render(false);
+    ui.notifications.info("Unlinked journal");
+  }
+//END
+
+
 
   async _onRefreshNPCs(event) {
     this.render(false);
@@ -327,6 +386,19 @@ async _handleJournalDrop(data, event) {
   if (!journal || journal.uuid === this.document.uuid) return; 
 
   const journalType = journal.getFlag("campaign-codex", "type");
+
+// Journal
+  const dropOnInfoTab = event.target.closest('.tab-panel[data-tab="info"]');
+    if (!journalType && dropOnInfoTab) {
+    await this._saveFormData();
+    const locationData = this.document.getFlag("campaign-codex", "data") || {};
+    locationData.linkedStandardJournal = journal.uuid;
+    await this.document.setFlag("campaign-codex", "data", locationData);
+    ui.notifications.info(`Linked journal "${journal.name}" to this location.`);
+    this.render(false);
+    return;
+  }
+  // END
   
   if (journalType === "npc") {
     await this._saveFormData();

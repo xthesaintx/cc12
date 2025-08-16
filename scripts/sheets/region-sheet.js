@@ -176,7 +176,7 @@ export class RegionSheet extends CampaignCodexBaseSheet {
 
     return `
       ${TemplateComponents.contentHeader('fas fa-map-marker-alt', 'Locations in this Region', createLocationBtn)}
-      ${game.user.isGM ? `${TemplateComponents.dropZone('location', 'fas fa-map-marker-alt', 'Add Locations', 'Drag location journals here to add them to this region')}`:''}
+      ${game.user.isGM ? `${TemplateComponents.dropZone('location', 'fas fa-map-marker-alt', 'Add Locations', 'Drag location journal or scene (creates location journal) here to add them to this region')}`:''}
       ${TemplateComponents.entityGrid(data.linkedLocations, 'location')}
     `;
   }
@@ -302,14 +302,50 @@ async _handleSceneDrop(data, event) {
     ui.notifications.warn("Could not find the dropped scene.");
     return;
   }
-  
-  await this._saveFormData();
-  await game.campaignCodex.linkSceneToDocument(scene, this.document);
-  ui.notifications.info(`Linked scene "${scene.name}" to ${this.document.name}`);
-  this.render(false);
+
+  const locationsTab = event.target.closest('.tab-panel[data-tab="locations"]');
+
+  if (locationsTab) {
+    const regionData = this.document.getFlag("campaign-codex", "data") || {};
+    const existingLocationUuids = regionData.linkedLocations || [];
+
+    for (const uuid of existingLocationUuids) {
+      try {
+        const existingLocation = await fromUuid(uuid);
+        if (!existingLocation) continue;
+
+        const nameMatch = existingLocation.name.toLowerCase() === scene.name.toLowerCase();
+
+        const existingLocationData = existingLocation.getFlag("campaign-codex", "data") || {};
+        const sceneMatch = existingLocationData.linkedScene === scene.uuid;
+
+        if (nameMatch && sceneMatch) {
+          ui.notifications.warn(`A location named "${scene.name}" linked to this scene already exists.`);
+          existingLocation.sheet.render(true); 
+          return; 
+        }
+      } catch (error) {
+        console.warn(`Campaign Codex | Error checking duplicate location for UUID: ${uuid}`, error);
+      }
+    }
+
+
+    const locationJournal = await game.campaignCodex.createLocationJournal(scene.name);
+    if (locationJournal) {
+      await game.campaignCodex.linkRegionToLocation(this.document, locationJournal);
+      await game.campaignCodex.linkSceneToDocument(scene, locationJournal);
+      ui.notifications.info(`Created and linked new location "${locationJournal.name}" from the scene.`);
+      this.render(false);
+      locationJournal.sheet.render(true);
+    }
+
+  } else {
+    await this._saveFormData();
+    await game.campaignCodex.linkSceneToDocument(scene, this.document);
+    ui.notifications.info(`Linked scene "${scene.name}" to ${this.document.name}`);
+    this.render(false);
+  }
 }
-
-
 
   async _handleJournalDrop(data, event) {
     const journal = await fromUuid(data.uuid);
