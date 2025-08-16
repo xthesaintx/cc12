@@ -3,7 +3,6 @@ import { TemplateComponents } from './template-components.js';
 import { DescriptionEditor } from './editors/description-editor.js';
 import { CampaignCodexLinkers } from './linkers.js';
 import { promptForName} from "../helper.js";
-import { promptForName} from "../helper.js";
 
 export class RegionSheet extends CampaignCodexBaseSheet {
   static get defaultOptions() {
@@ -60,7 +59,7 @@ export class RegionSheet extends CampaignCodexBaseSheet {
     }
 
 
-    
+
     data.sheetType = "region";
     data.sheetTypeLabel = "Region";
     data.customImage = this.document.getFlag("campaign-codex", "image") || TemplateComponents.getAsset('image','region');
