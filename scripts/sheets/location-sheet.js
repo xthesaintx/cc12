@@ -20,8 +20,8 @@ export class LocationSheet extends CampaignCodexBaseSheet {
     const data = await super.getData();
     const locationData = this.document.getFlag("campaign-codex", "data") || {};
 
-    data.linkedScene = null;
-  if (locationData.linkedScene) {
+  data.linkedScene = null;
+    if (locationData.linkedScene) {
     try {
       const scene = await fromUuid(locationData.linkedScene);
       if (scene) {
@@ -32,6 +32,7 @@ export class LocationSheet extends CampaignCodexBaseSheet {
         };
       }
     } catch (error) {
+      
       console.warn(`Campaign Codex | Linked scene not found: ${locationData.linkedScene}`);
     }
   }
@@ -53,9 +54,16 @@ export class LocationSheet extends CampaignCodexBaseSheet {
                     name: journal.name,
                     img: journal.img || "icons/svg/book.svg" 
                 };
-            }
+            } else {
+            throw new Error(`Journal document not found for UUID.`);
+        }
         } catch (error) {
             console.warn(`Campaign Codex | Linked standard journal not found: ${locationData.linkedStandardJournal}`);
+            if (game.user.isGM) {
+            const updatedData = foundry.utils.deepClone(locationData);
+            updatedData.linkedStandardJournal = null;
+            await this.document.setFlag("campaign-codex", "data", updatedData);
+        }
         }
     }
 

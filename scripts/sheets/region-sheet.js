@@ -52,11 +52,19 @@ export class RegionSheet extends CampaignCodexBaseSheet {
                     name: journal.name,
                     img: journal.img || "icons/svg/book.svg" 
                 };
-            }
+            } else {
+            throw new Error(`Journal document not found for UUID.`);
+        }
         } catch (error) {
             console.warn(`Campaign Codex | Linked standard journal not found: ${regionData.linkedStandardJournal}`);
+            if (game.user.isGM) {
+            const updatedData = foundry.utils.deepClone(regionData);
+            updatedData.linkedStandardJournal = null;
+            await this.document.setFlag("campaign-codex", "data", updatedData);
+        }
         }
     }
+
 
 
 
