@@ -3,28 +3,32 @@
   "title": "campaign-codex",
   "version": "0.7.4",
   "esmodules": ["scripts/main.js"],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
   "compatibility": {
     "minimum": "12",
     "verified": "12",
     "maximum": "12"
   },
-      "url": "https://wgtngm.com/",
+  "url": "https://wgtngm.com/",
   "manifest": "https://github.com/xthesaintx/cc12/releases/latest/download/module.json",
   "download": "https://www.dropbox.com/scl/fi/l0a62zw9ofcf03yjhqd6x/campaign-codex.zip?rlkey=h6ncgtxrw38vrwq8rrb7jojlr&st=b4mo4owy&dl=1",
   "readme": "https://wgtngm.com/campaign-codex",
-  
-"authors": [
+
+  "authors": [
     {
       "name": "Stephen Garrett",
       "url": "https://www.patreon.com/wgtngm",
       "flags": {}
     }
   ],
-  "styles": [
-    "styles/campaign-codex.css"
-  ],
-    "relationships": {
-    "systems": [
-    ]
+  "styles": ["styles/campaign-codex.css"],
+  "relationships": {
+    "systems": []
   }
 }
