@@ -61,9 +61,9 @@ export class TemplateComponents {
     editlocation,
     isOwner = false,
   ) {
-    const systemClass = game.system.id === "dnd5e" ? " dnd5e" : "";
+    const systemClass = game.system.id === "dnd5e" ? " dnd5e2-journal" : "";
     const journalClass =
-      game.system.id === "dnd5e" ? "journal-entry-content" : "";
+      game.system.id === "dnd5e" ? "journal-page-content" : "";
 
     if (!isOwner)
       return `
@@ -79,16 +79,19 @@ export class TemplateComponents {
     `;
 
     return `
-      <div class="form-section${systemClass}" name="proseedited">
+      <section class="form-section cc-enriched" name="proseedited">
         <label class="form-label">
           <i class="${icon}"></i>
           ${label}
           <a class="cc-edit-${editlocation}" title="Edit"><i class="fas fa-edit" style="margin-left: 8px; cursor: pointer;"></i></a>
         </label>
-      <div class="${journalClass}">
+      <article class="journal-entry-page ${systemClass}" name="proseedited">
+      <section class="journal-page-content">
       ${enrichedValue}
-      </div>
-      </div>
+      </section>
+      </article>
+      </section>
+
     `;
   }
 
