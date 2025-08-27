@@ -2684,13 +2684,30 @@
   }
 }
 
-.campaign-codex section.secret > button.reveal{
-    position: relative;
-    left: 50%;
-    top: -18px;
-    transform: translateX(-50%);
-    border-radius: 8px;
-    background: var(--cc-border);
-    border: none;
-    color: white;
+
+/*
+ * ---------------------------------------------
+ * Secret Block Button 
+ * ---------------------------------------------
+ */
+
+.campaign-codex section.secret > button.reveal {
+  border-radius: 8px;
+  background: var(--cc-border);
+  border: none;
+  color: white;
+  position: sticky;
+  left: 50%;
+  transform: translateY(-12px) translateX(-50%);
+  margin-top: auto;
+  width: auto;
+  height: auto;
+  padding: 0px 4px 0px 4px;
+}
+
+.campaign-codex section.secret {
+    margin-top: 20px;
+}
+.campaign-codex .cc-hidden-secrets section.secret > button.reveal {
+  display: none;
 }
