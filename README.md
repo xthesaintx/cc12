@@ -1,4 +1,7 @@
 # Campaign Codex v12
+
+For the most up-to-date version of this Module check out the [Foundry v13 version] (https://github.com/xthesaintx/cc13/)
+
 Encounter a bug or issue with the Campaign Codex Foundry VTT module? Please report it [here](https://github.com/xthesaintx/cc12/issues).
 
 Discord: https://discord.gg/fycwH79s2y
