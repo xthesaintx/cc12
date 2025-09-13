@@ -763,7 +763,6 @@ export class SimpleCampaignCodexExporter {
         );
 
         if (existingDoc) {
-            // ui.notifications.info(`Updating existing document "${doc.name}" in compendium "${targetPack.metadata.label}".`);
             exportData._id = existingDoc._id;
             const updateResult = await targetPack.documentClass.updateDocuments(
                 [exportData],
@@ -771,7 +770,6 @@ export class SimpleCampaignCodexExporter {
             );
             return updateResult[0];
         } else {
-            // ui.notifications.info(`Importing new document "${doc.name}" into compendium "${targetPack.metadata.label}".`);
             return await targetPack.importDocument(
                 doc.clone(exportData, { keepId: false }),
             );

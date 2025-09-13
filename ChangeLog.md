@@ -1,5 +1,29 @@
-## 0.7.62
-- Hot fix to hide buttons on secrets in selected group sheets until I can fix
+## 0.7.91
+- UI improvements
+
+## 0.7.88b
+- Create journal dialog not working for NPCs fixed
+
+## 0.7.87b
+- Complete overhaul of linked cards, buttons and major UI improvements
+- Complete overhaul of group sheets
+- Refactored and fixed linking, link clean up and updating
+- Refactored some link checking
+- Refactored hooks
+- Linked cards click through to sheets
+- Add tag toggle to npc sheet
+- Added tag information to side panel and on cards
+- Fixed scrolling
+- Fixed indirect link updating
+- NPCs and tags on region sheets
+- Moved permission checking to linkers
+- Substantial back end code improvements
+
+### Fixes
+- Enter on Markup Unlinking standard journal
+
+## 0.7.7b
+- Added inline editors
 
 ## 0.7.61
 - Inventory column header row fix when base price is disabled
@@ -32,7 +56,7 @@
 
 - Ability to create and link a location from a region sheet  
 - Ability to create and link an entry from a location sheet  
-- Ability to create and link an entry from a NPC sheet
+- Ability to create and link an entry from a NPC sheet  
 - Ability to create and link an NPC from a entry sheet  
 - Create and link a location by dropping a scene onto the location tab of a region, and the scene links to the location. Checks for duplicates (same location name, same scene) and won't create  
 - "Create Journal Entry" menu integration
@@ -60,6 +84,7 @@
 - Bug Fix: Fix one editor window resetting to the last saved state when another editor is saved or sheet updates.  
 - Fix CSS for main images on sheet so landscape images are centred and portraits are centred top third (object-position: 50% 25%;)  
 - Fixed names not updating on open linked journals until reopened
+- v13: Fixed the DnD5e journal styling
 
 
 ## 0.7.5

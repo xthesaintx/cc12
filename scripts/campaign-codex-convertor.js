@@ -283,7 +283,9 @@ export class CampaignCodexJournalConverter {
             callback: async (html) => {
               const nativeHtml = html instanceof jQuery ? html[0] : html;
               const form = nativeHtml.querySelector("form");
-              const formData = new FormDataExtended(form).object;
+              const formData = new FormDataExtended(
+                form,
+              ).object;
 
               const options = {
                 namePrefix: "",
