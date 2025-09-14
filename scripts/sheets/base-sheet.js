@@ -388,16 +388,8 @@ export class CampaignCodexBaseSheet extends JournalSheet {
   }
 
   async _onOpenDocument(event, type) {
-    // event.stopPropagation();
     if (event.target.closest(".entity-image, .shop-icon, .card-image-clickable")) {
-      // const img = event.target.closest(".entity-image").querySelector("img");
-      // if (img && img.src) {
-      //   new foundry.applications.apps.ImagePopout({
-      //     src: img.src,
-      //     window: { title: this.document.name }
-      //   }).render(true);
         return; 
-      // }
     }
 
     event.stopPropagation();

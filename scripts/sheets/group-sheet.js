@@ -792,7 +792,6 @@ export class GroupSheet extends CampaignCodexBaseSheet {
     if (!nodes || nodes.length === 0) return "";
     const hideByPermission = game.settings.get("campaign-codex", "hideByPermission");
 
-    // 1. Define the desired order for sorting by type.
     const typeOrder = {
       tag: 1,
       group: 2,
@@ -800,36 +799,23 @@ export class GroupSheet extends CampaignCodexBaseSheet {
       location: 4,
       shop: 5,
       npc: 6,
-      associate: 6, // Associates are NPCs, so they get the same priority
+      associate: 6, 
     };
 
-    // 2. Filter nodes based on permissions first.
     const filteredNodes = nodes.filter((child) => !hideByPermission || child.canView);
 
-    // 3. Sort the filtered nodes using the custom multi-level sort.
     const sortedNodes = [...filteredNodes].sort((a, b) => {
-      const typeA = typeOrder[a.type] || 99; // Get numeric order for type A
-      const typeB = typeOrder[b.type] || 99; // Get numeric order for type B
+      const typeA = typeOrder[a.type] || 99; 
+      const typeB = typeOrder[b.type] || 99; 
 
-      // If types are different, sort by the defined type order
       if (typeA !== typeB) {
         return typeA - typeB;
       }
 
-      // If types are the same, sort alphabetically by name
       return a.name.localeCompare(b.name);
     });
 
-    // 4. Map the sorted nodes to HTML.
     return sortedNodes
-    // if (!nodes || nodes.length === 0) return "";
-    // const hideByPermission = game.settings.get("campaign-codex", "hideByPermission");
-
-    // const alphaCards = game.settings.get("campaign-codex", "sortCardsAlpha");
-    // const nodestoRender = alphaCards ? [...nodes].sort((a, b) => a.name.localeCompare(b.name)) : nodes;
-
-    // const filteredNodesToRender = nodestoRender.filter((child) => !hideByPermission || child.canView);
-    // return filteredNodesToRender
       .map((node) => {
         const children = node.associates ? [...node.associates, ...node.locations, ...node.shops, ...node.regions] : [];
         const hasChildren = children.length > 0;
@@ -865,21 +851,10 @@ export class GroupSheet extends CampaignCodexBaseSheet {
   }
 
   _generateTreeNodes(nodes, nestedData) {
-    // let html = "";
-    // if (!nodes) return html;
-    // const alphaCards = game.settings.get("campaign-codex", "sortCardsAlpha");
-    // const nodestoRender = alphaCards ? [...nodes].sort((a, b) => a.name.localeCompare(b.name)) : nodes;
-    // const hideByPermission = game.settings.get("campaign-codex", "hideByPermission");
 
-    // return nodestoRender
-    //   .map((node) => {
-    //     if (node.type === "npc" && !this._showTreeNPCs) {
-    //       return "";
-    //     }
 
     if (!nodes) return "";
 
-    // 1. Define the desired order for sorting by type.
     const typeOrder = {
       group: 1,
       region: 2,
@@ -888,23 +863,19 @@ export class GroupSheet extends CampaignCodexBaseSheet {
       npc: 5,
     };
 
-    // 2. Sort the nodes using a custom compare function.
     const sortedNodes = [...nodes].sort((a, b) => {
       const typeA = typeOrder[a.type] || 99; // Get the numeric order for type A
       const typeB = typeOrder[b.type] || 99; // Get the numeric order for type B
 
-      // If the types are different, sort by type order
       if (typeA !== typeB) {
         return typeA - typeB;
       }
 
-      // If types are the same, sort alphabetically by name
       return a.name.localeCompare(b.name);
     });
 
     const hideByPermission = game.settings.get("campaign-codex", "hideByPermission");
 
-    // 3. Map the now sorted nodes to HTML.
     return sortedNodes
       .map((node) => {
         if (node.type === "npc" && !this._showTreeNPCs) {

@@ -256,7 +256,6 @@ export class ShopSheet extends CampaignCodexBaseSheet {
     }
 
     // --- Listeners for non-click events ---
-    // These are handled individually because they use events other than "click"
     nativeHtml.querySelector("form")?.addEventListener("submit", (event) => event.preventDefault());
     nativeHtml.querySelector(".markup-input")?.addEventListener("change", this._onMarkupChange.bind(this));
     nativeHtml.querySelector(".shop-loot-toggle")?.addEventListener("change", this._onLootToggle.bind(this));
@@ -682,7 +681,6 @@ export class ShopSheet extends CampaignCodexBaseSheet {
     // Journal
     const dropOnInfoTab = event.target.closest('.tab-panel[data-tab="info"]');
     if (((data.type === "JournalEntry" && !journalType) || data.type === "JournalEntryPage") && dropOnInfoTab) {
-      // await this._saveFormData();
       const locationData = this.document.getFlag("campaign-codex", "data") || {};
       locationData.linkedStandardJournal = journal.uuid;
       await this.document.setFlag("campaign-codex", "data", locationData);
@@ -692,7 +690,6 @@ export class ShopSheet extends CampaignCodexBaseSheet {
     }
 
     if (journalType === "npc") {
-      // await this._saveFormData();
       await this._saveFormData();
       await game.campaignCodex.linkShopToNPC(this.document, journal);
       this.render(false);

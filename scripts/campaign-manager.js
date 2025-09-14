@@ -601,7 +601,6 @@ async _scheduleSheetRefresh(changedDocUuid) {
       if (changedDoc) {
         const changedType = changedDoc.getFlag("campaign-codex", "type");
 
-        // Case 1: An NPC was updated
         if (changedType === "npc") {
           const npcData = changedDoc.getFlag("campaign-codex", "data") || {};
           const directLocationsAndRegions = (await CampaignCodexLinkers.getNameFromUuids(npcData.linkedLocations || [])).map(uuid => fromUuid(uuid));
@@ -640,12 +639,7 @@ async _scheduleSheetRefresh(changedDocUuid) {
             }
         }
         
-        // if(changedType === "location") {
-        //      const locationData = changedDoc.getFlag("campaign-codex", "data") || {};
-        //      if(locationData.parentRegion) {
-        //          indirectlyRelatedUuids.add(locationData.parentRegion);
-        //      }
-        // }
+
       }
     } catch (e) {
       console.warn(`Campaign Codex | Could not process indirect relationships for ${changedDocUuid}`, e);

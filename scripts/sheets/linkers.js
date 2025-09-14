@@ -125,9 +125,7 @@ export class CampaignCodexLinkers {
           return null;
         }
 
-        // Chain the second promise for the permission check
         return CampaignCodexBaseSheet.canUserView(actor.uuid).then((canView) => {
-          // Once the permission check is complete, return the final object
           return {
             id: actor.id,
             uuid: actor.uuid,

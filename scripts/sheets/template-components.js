@@ -45,28 +45,6 @@ export class TemplateComponents {
     return ASSET_MAP.default.image;
   }
 
-  // static async prepareEntitiesWithPermissions(entities) {
-  //   if (!entities || entities.length === 0) return [];
-  //   const permissionPromises = entities.map((entity) => {
-  //     const entityPromise = CampaignCodexBaseSheet.canUserView(entity.uuid);
-  //     const actorPromise = entity.actor?.uuid
-  //       ? CampaignCodexBaseSheet.canUserView(entity.actor.uuid)
-  //       : Promise.resolve(false);
-  //     return Promise.all([entityPromise, actorPromise]);
-  //   });
-
-  //   const allPermissions = await Promise.all(permissionPromises);
-
-  //   return entities.map((entity, index) => {
-  //     const [canViewEntity, canViewActor] = allPermissions[index];
-
-  //     return {
-  //       ...entity,
-  //       canView: canViewEntity,
-  //       canViewActor: canViewActor,
-  //     };
-  //   });
-  // }
 
   // =========================================================================
   // General UI Components
@@ -116,7 +94,6 @@ export class TemplateComponents {
       rawValue = rawValue[0] || "";
     }
 
-    // const escapedRawValue = foundry.utils.escapeHTML(rawValue);
     const escapedRawValue = Handlebars.escapeExpression(rawValue);
 
     return `
