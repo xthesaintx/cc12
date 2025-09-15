@@ -607,7 +607,7 @@ export class GroupSheet extends CampaignCodexBaseSheet {
     const preparedNPCs = npcs;
 
     const taggedNpcMap = preparedNPCs.reduce((acc, npc) => {
-      if (npc.tag === false) {
+      if (!npc.tag) {
         acc.set(npc.uuid, npc);
       }
       return acc;
@@ -689,7 +689,7 @@ export class GroupSheet extends CampaignCodexBaseSheet {
         : "";
 
     const taggedNpcMap = preparedassociates.reduce((acc, npc) => {
-      if (npc.tag === false) {
+      if (!npc.tag) {
         acc.set(npc.uuid, npc);
       }
       return acc;
