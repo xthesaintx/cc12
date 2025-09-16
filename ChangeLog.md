@@ -1,3 +1,6 @@
+## 0.7.93
+- entity name css text wrap fix
+
 ## 0.7.92
 - region sheet NPC tab fix
 
