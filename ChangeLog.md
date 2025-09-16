@@ -1,3 +1,6 @@
+## 0.7.92
+- region sheet NPC tab fix
+
 ## 0.7.91
 - UI improvements
 

@@ -1,7 +1,7 @@
 {
   "id": "campaign-codex",
   "title": "campaign-codex",
-  "version": "0.7.91",
+  "version": "0.7.92",
   "esmodules": ["scripts/main.js"],
   "languages": [
     {
