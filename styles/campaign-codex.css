@@ -1773,6 +1773,7 @@ width: 40px;
   gap: 12px;
   background: var(--cc-accent);
   box-shadow: var(--cc-shadow);
+  justify-content: center;
 }
 
 /*RIGHT 30*/

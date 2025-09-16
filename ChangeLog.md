@@ -1,3 +1,7 @@
+## 0.7.94
+- filepicker fix
+- css filter button fix
+
 ## 0.7.93
 - entity name css text wrap fix
 

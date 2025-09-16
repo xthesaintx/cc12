@@ -368,7 +368,7 @@ export class CampaignCodexBaseSheet extends JournalSheet {
     event.preventDefault();
     event.stopPropagation();
     const current = this.document.getFlag("campaign-codex", "image") || this.document.img;
-    const fp = new foundry.applications.apps.FilePicker.implementation({
+    const fp = new FilePicker({
       type: "image",
       current: current,
       callback: async (path) => {
