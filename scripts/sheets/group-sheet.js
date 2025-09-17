@@ -1202,7 +1202,7 @@ export class GroupSheet extends CampaignCodexBaseSheet {
 
   async _addMemberToGroup(newMemberUuid) {
     if (newMemberUuid === this.document.uuid) {
-      ui.notifications.warn();
+      ui.notifications.warn(localize("group.self"));
       return;
     }
 

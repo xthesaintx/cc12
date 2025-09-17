@@ -1,4 +1,4 @@
-## 0.7.95
+## 0.7.96
 - circular dependancy fix
 
 
