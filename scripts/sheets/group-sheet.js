@@ -1213,7 +1213,7 @@ export class GroupSheet extends CampaignCodexBaseSheet {
     }
 
     // Check for and prevent circular dependencies
-    if (newMemberDoc.getFlag("campaign-codex", "type") === "group.notfound") {
+    if (newMemberDoc.getFlag("campaign-codex", "type") === "group") {
       const membersOfNewGroup = await GroupLinkers.getGroupMembers(newMemberDoc.getFlag("campaign-codex", "data")?.members || []);
       const nestedDataOfNewGroup = await GroupLinkers.getNestedData(membersOfNewGroup);
 

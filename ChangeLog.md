@@ -1,3 +1,7 @@
+## 0.7.95
+- circular dependancy fix
+
+
 ## 0.7.94
 - filepicker fix
 - css filter button fix
